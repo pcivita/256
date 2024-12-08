@@ -2,38 +2,73 @@ public class VideoClass {
     
     Video@ video;
     GMesh mesh;
+    GMesh meshes[400];
+    0 => float video_aspect;
+    [ 
+            new PlaneGeometry,
+            new CubeGeometry,
+            new SuzanneGeometry,
+    ] @=> Geometry geometries[];
+     FlatMaterial video_mat;
 
-    fun void init(string videoFile) {
+    fun void init(string videoFile, int create) {
         
         Video video(me.dir() + videoFile);
-        video @=> this.video;
         video.gain(0);
+        video @=> this.video;
         video.texture() @=> Texture video_texture;
-        (video.width() $ float) / video.height() => float video_aspect;
-        FlatMaterial video_mat;
+        (video.width() $ float) / video.height() => video_aspect;
+
         video_mat.scale(@(1, -1));
        
-        [ 
-            new PlaneGeometry,
-            new SuzanneGeometry
-        ] @=> Geometry geometries[];
-
+        
+        if (create) {
         GMesh video_mesh(geometries[0], video_mat) --> GG.scene();
         video_mesh @=> mesh;
-        mesh.scaX(3 * video_aspect);
-        mesh.scaY(3);
-        mesh.scaZ(3);
+        } else {
+            GMesh video_mesh(geometries[0], video_mat);
+            video_mesh @=> mesh;
+        }
+        
+        mesh.scaX(5 * video_aspect);
+        mesh.scaY(5);
+        mesh.scaZ(5);
 
         video_mat.colorMap(video_texture);
         1 => video.loop;
 
-        // GMesh video_meshes(geometries[0], video_mat)[100];
-        // for (auto mesh : video_meshes) {
-        //     Math.random2(0, 10) => int randomX;
-        //     mesh --> GG.scene();
-        //     mesh.posX(randomX);
+        
 
-        // }
+    }
+
+
+    fun void initCube(string videoFile, int create, int geo) {
+        
+        Video video(me.dir() + videoFile);
+        video.gain(0);
+        video @=> this.video;
+        video.texture() @=> Texture video_texture;
+        (video.width() $ float) / video.height() => video_aspect;
+
+        video_mat.scale(@(1, -1));
+       
+        
+        if (create) {
+        GMesh video_mesh(geometries[geo], video_mat) --> GG.scene();
+        video_mesh @=> mesh;
+        } else {
+            GMesh video_mesh(geometries[geo], video_mat);
+            video_mesh @=> mesh;
+        }
+        
+        mesh.scaX(5 * video_aspect);
+        mesh.scaY(5);
+        mesh.scaZ(5);
+
+        video_mat.colorMap(video_texture);
+        1 => video.loop;
+
+        
 
     }
 
@@ -47,5 +82,44 @@ public class VideoClass {
         mesh.posZ(z);
     }
 
+    fun void multiply(int geo) {
+        GMesh video_meshes(geometries[geo], video_mat)[400] @=> meshes;
+        0 => int index;
+
+        -10 => int x_start;
+        9 => int x_end;
+        10 => int y_start;
+        -9 => int y_end;    
+
+        x_start => int x;
+        y_start => int y;
+
+
+        for (auto mesh : meshes) {
+           
+            mesh --> GG.scene();
+    
+            mesh.posX(x * 3);
+            mesh.posY(y * 4);
+
+            mesh.scaX(2 * video_aspect);
+            mesh.scaY(2);
+            mesh.scaZ(2);
+            
+            x + 1 => x;
+            if (x > x_end) {
+            x_start => x;
+            y - 1 => y;
+
+            }
+        }
+    }
+    fun void removeMult() {
+        video.rate(0);
+        for (auto mesh : meshes) {
+           
+            mesh.detach();
+        }
+    }
     // fun void removeVideo()
 }

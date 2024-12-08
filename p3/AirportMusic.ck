@@ -40,7 +40,7 @@ public class Airport {
     }
 
     fun void stop() {
-        Machine.remove(C.id());
+        // Machine.remove(C.id());
         0 => play;
     }
 }
