@@ -11,7 +11,7 @@
 // Frame Dropping (detach)
 // Airport Class
 
-GG.fullscreen();
+// GG.fullscreen();
 //
 
 // create video Texture
@@ -38,7 +38,7 @@ GG.outputPass().tonemap(OutputPass.ToneMap_None);
 // Setup Camera System (weird, but without it, it wasn't working)
     GGen camSystem;
     camSystem --> GG.scene();
-    GOrbitCamera cam;
+    GCamera cam;
     cam --> camSystem;
     GG.scene().camera(cam);
     camSystem.pos(@(0, 0, 0));
@@ -87,7 +87,6 @@ text --> GG.scene();
         video.video.rate(0);
         video.mesh.detach();
         video.init("videos/screen.mpg", 1);
-        sec * 6.5 => now;
         addTime(6.5);
 
         video.video.rate(0);
@@ -160,32 +159,85 @@ text --> GG.scene();
 1 => int scene3;
     fun void sceneThree() {
         
-        GPlane p --> GG.scene();
-        p.scaX(8);
-        p.scaY(5);
-        p.rotX(Math.pi);
-        Texture.load(me.dir() + "./milestone.png" ) @=> Texture tex;
-        p.colorMap(tex);
-        p.shine(100);
+        // sec * 96.5 => now;
+        camSystem.pos(@(0, 0, 2.5));
+        // pedro.video.rate(0);
+        // pedro.removeMult();
+        // video.initCube("videos/ss.mpg", 1, 1);
+        // spork ~ f.play();
 
+        // sec * 4 => now;
+        // spork ~ moveCamera();
+        // sec * 4 => now;
+        // 0 => moveTime;
+        // spork ~ video.rotateCube();
+        // sec * 4 => now;
+        // video.video.rate(0);
+        // video.mesh.detach();
+        // video.initCube("videos/feedback.mpg", 1, 1);
+      
+        // sec * 4 => now;
+        // video.video.rate(0);
+        // video.mesh.detach();
+        // video.initCube("videos/sketch.mpg", 1, 1);
+
+        // sec * 4 => now;
+        // video.video.rate(0);
+        // video.mesh.detach();
+        video.initCube("videos/pCar.mpg", 1, 1);
+
+        spork ~ walk();
+        
+        
+
+        // I never knew who my brother was talking to.
+        // I also never asked
+        // Lil Baby!
 
         sec * 4 => now;
-        Texture.load(me.dir() + "./feedback.png" ) @=> tex;
-        p.colorMap(tex);
-        s.Feedback(text);
-        sec * 4 => now;
-        video.initCube("videos/sketch.mpg", 1, 1);
-        p --< GG.scene();
-        f.play();
-       
+        
+
+       while (true) {
+        sec => now;
+       }
     }
 
+ Math.pi / 2 => float rotationSpeed;  // 90 degrees per second
+
+ 0.0 => float curAngle;
+fun void walk() {
+    while (true) {
+    GG.nextFrame() => now; // Wait for the next frame
+
+    // Check if the W key is pressed
+    if (UI.isKeyDown(UI_Key.W) == 1) {
+        24::samp => now;
+        GG.dt() => float dt;
+        camSystem.posZ(camSystem.posZ() + 0.1);
+    }
+     if (UI.isKeyDown(UI_Key.D) == 1) {
+      
+    // Wait one frame or a certain number of samples if needed
+    24::samp => now;
+
+    GG.dt() => float dt;
+
+      curAngle + (rotationSpeed * dt) => curAngle;
+
+    // Rotate camera by that speed scaled by the frame’s dt
+    camSystem.rotY(curAngle);
+}
+}
+}
 fun void moveCamera() {
     // get delta time
+       <<< moveTime>>>;
     while(moveTime) {
         24::samp => now;
         GG.dt() => float dt;
         camSystem.posZ(camSystem.posZ() + 0.001);
+       
+      
     }
 }
 

@@ -122,4 +122,15 @@ public class VideoClass {
         }
     }
     // fun void removeVideo()
+
+    fun void rotateCube() {
+
+        0.0 => float angle;
+    while (true) {
+        GG.nextFrame() => now;
+        GG.dt() => float dt;    // Get the time elapsed since last frame
+        angle + (dt * 0.5) => angle;      // Increase angle slowly: 0.5 radians/sec
+        mesh.rotY(angle);       // Set mesh rotation around Y axis
+    }
+    }
 }
