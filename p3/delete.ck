@@ -1,106 +1,56 @@
-//-----------------------------------------------------------------------------
-// name: video.ck
-// desc: Video playback example. Currently only supports the MPEG1 video and 
-// MP2 audio.
-// To run, download and place this music video in the same directory: 
-// https://ccrma.stanford.edu/~azaday/music/bjork-all-is-full-of-love.mpg
-//
-// authors: Andrew Zhu Aday (https://ccrma.stanford.edu/~azaday/)
-//
-// Find more mpeg samples here: https://filesamples.com/formats/mpeg
-//
-// date: Fall 2024
-//-----------------------------------------------------------------------------
+@import "music.ck";
 
-Video video(me.dir() + "./bjork.mpg") => dac; 
+Festival f;
 
-<<< "VM Samplerate: ", 1::second / 1::samp >>>;
-<<< "Framerate: ", video.framerate() >>>;
-<<< "Samplerate: ", video.samplerate() >>>;
-<<< "Duration: ", video.duration() >>>;
-<<< "Loop: ", video.loop() >>>;
-<<< "Rate: ", video.rate() >>>;
 
-video.texture() @=> Texture video_texture;
-(video.width() $ float) / video.height() => float video_aspect;
+spork ~ f.playSong();
+spork ~ f.stop();
 
-[
-    new PlaneGeometry,
-    new SuzanneGeometry,
-    new SphereGeometry,
-    new CubeGeometry,
-    new CircleGeometry,
-    new TorusGeometry,
-    new CylinderGeometry,
-    new KnotGeometry,
-] @=> Geometry geometries[];
 
-UI_Int geometry_index;
-[
-    "PlaneGeometry",
-    "SuzanneGeometry",
-    "SphereGeometry",
-    "CubeGeometry",
-    "CircleGeometry",
-    "TorusGeometry",
-    "CylinderGeometry",
-    "KnotGeometry",
-] @=> string builtin_geometries[];
 
-FlatMaterial video_mat;
-video_mat.scale(@(1, -1)); // flip the y-axis
+while( true ) {
+     
+1::eon => now;
+   }
 
-GMesh video_mesh(geometries[0], video_mat) --> GG.scene();
+// STK Flute
+// // patch
+// Brass brass => JCRev r => dac;
+// .75 => r.gain;
+// .05 => r.mix;
 
-GOrbitCamera camera --> GG.scene();
-camera.clip(.01, 1000);
-GG.scene().camera(camera);
+// our notes
+// [ 61, 63, 65, 66, 68 ] @=> int notes[];
 
-video_mesh.scaX(3 * video_aspect);
-video_mesh.scaY(3);
-video_mesh.scaZ(3);
+// infinite time-loop
+// while( true )
+// {
+//     set
+//     Math.random2f( 0, 1 ) => brass.lip;
+//     Math.random2f( 0, 1 ) => brass.slide;
+//     Math.random2f( 0, 12 ) => brass.vibratoFreq;
+//     Math.random2f( 0.1, 0.2 ) => brass.vibratoGain;
+//     Math.random2f( 0, 1 ) => brass.volume;
 
-video_mat.colorMap(video_texture);
+//     print
+//     <<< "---", "" >>>;
+//     <<< "lip tension:", brass.lip() >>>;
+//     <<< "slide length:", brass.slide() >>>;
+//     <<< "vibrato freq:", brass.vibratoFreq() >>>;
+//     <<< "vibrato gain:", brass.vibratoGain() >>>;
+//     <<< "volume:", brass.volume() >>>;
 
-UI_Float rate(1.0);
-UI_Bool loop(video.loop());
-UI_Float2 copies(video_mat.scale());
-UI_Float3 scale(video_mesh.sca());
+//     for( int i; i < notes.size(); i++ )
+//     {
+//         play( 12 + notes[i], Math.random2f( .6, .9 ) );
+//         300::ms => now;
+//     }
+// }
 
-while (true) {
-    GG.nextFrame() => now;
-
-    if (GWindow.keyDown(GWindow.Key_Left)) {
-        video.seek(video.timestamp() - 10::second);
-    } else if (GWindow.keyDown(GWindow.Key_Right)) {
-        video.seek(video.timestamp() + 10::second);
-    }
-
-    if (UI.begin("")) {
-
-        UI.textWrapped("Use the arrow keys to seek 10 seconds back or forward.");
-
-        UI.separator();
-
-        if (UI.slider("Rate", rate, -2.0, 2.0)) {
-            rate.val() => video.rate;
-        }
-
-        if (UI.listBox("builtin geometries", geometry_index, builtin_geometries)) {
-            video_mesh.geometry(geometries[geometry_index.val()]);
-        }
-
-        if (UI.drag("Copies", copies)) {
-            copies.val() => video_mat.scale;
-        }
-
-        if (UI.drag("Scale", scale)) {
-            scale.val() => video_mesh.sca;
-        }
-
-        if (UI.checkbox("Loop", loop)) {
-            loop.val() => video.loop;
-        }
-    }
-    UI.end();
-}
+// basic play function (add more arguments as needed)
+// fun void play( float note, float velocity )
+// {
+//     start the note
+//     Std.mtof( note ) => brass.freq;
+//     velocity => brass.noteOn;
+// }

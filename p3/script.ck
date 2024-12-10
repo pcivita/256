@@ -18,11 +18,12 @@ fun void IntroText(GText text) {
 }
 fun void CopyText(GText text) {
     <<< "COPY" >>>;
-    sec * 4 => now;
+    sec * 2 => now;
     text.posY(-3);
-    text.posZ(5);
+    text.posZ(3);
+    text.sca(.3);
     text.text("Sometimes it feels like I'm just copying stuff");
-    sec * 4 => now;
+    sec * 6 => now;
     text.text("like this song... remember?");
     sec * 4 => now;
     text.text("we made it together in class!");
@@ -51,6 +52,11 @@ fun void CodeText(GText text) {
     text.text("Too bad though");
     sec * 2 => now;
     text.text("class starts in like 2 hours");
+    sec * 2 => now;
+    text.text("(not really, cuz that was last week...)");
+     sec * 2 => now;
+     text.text("(but here's me working on this)");
+     sec * 2 => now;
 
 }
 

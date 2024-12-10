@@ -3,6 +3,7 @@ public class VideoClass {
     Video@ video;
     GMesh mesh;
     GMesh meshes[400];
+    1 => int rotate;
     0 => float video_aspect;
     [ 
             new PlaneGeometry,
@@ -126,11 +127,21 @@ public class VideoClass {
     fun void rotateCube() {
 
         0.0 => float angle;
-    while (true) {
+        1 => rotate;
+    while (rotate) {
         GG.nextFrame() => now;
         GG.dt() => float dt;    // Get the time elapsed since last frame
         angle + (dt * 0.5) => angle;      // Increase angle slowly: 0.5 radians/sec
         mesh.rotY(angle);       // Set mesh rotation around Y axis
     }
+    }
+
+    fun void setHall(int depth) {
+        mesh.scaX(10);
+        mesh.scaZ(depth);
+    }
+
+    fun void stopRotate() {
+        0 => rotate;
     }
 }

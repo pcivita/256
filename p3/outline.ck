@@ -39,6 +39,7 @@
 
 
 // Dialogue:
+    "I GOT ROTATE TO WORK"
     "This project is kinda about nothing then."
     I tell my brother after showing Milestone 2 to him
     "Well, I don't think that's true"
